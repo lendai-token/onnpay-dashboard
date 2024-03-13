@@ -1,0 +1,16 @@
+.cls-1 {
+    isolation: isolate;
+}
+
+.cls-2 {
+    fill: #34c53f;
+}
+
+.cls-3 {
+    mix-blend-mode: screen;
+    fill: url(#linear-gradient);
+}
+
+.cls-4 {
+    fill: #003456;
+}

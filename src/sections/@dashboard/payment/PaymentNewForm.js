@@ -95,7 +95,6 @@ export default function PaymentNewForm({ isEdit, currentPayment }) {
       values.amount = parseFloat(values.amount);
       values.serviceCommand = 'PAYMENT_LINK';
       values.linkCommand = 'PURCHASE';
-      values.returnUrl = 'http://localhost:3030/payment';
       values.expiryDate = fDateTimeWithTimezone(values.expiryDate);
 
       const config = {

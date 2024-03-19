@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Grid, Card, Stack } from '@mui/material';
+import { Grid, Card, Stack, Box } from '@mui/material';
 // utils
 import axios from '../../../utils/axios';
 // hooks
@@ -34,6 +34,9 @@ export default function Other({ isEdit, currentUser }) {
     internationalCommission: Yup.number().required('International Commission Percentage is required'),
     withdrawal: Yup.number().required('Withdrawal Charge is required'),
     other: Yup.number().required('Other Charges is required'),
+    accessCode: Yup.string().required('Access Code is required'),
+    merchantId: Yup.string().required('Merchant Identifier is required'),
+    shaRequest: Yup.string().required('SHA Request is required')
   });
 
   const defaultValues = useMemo(
@@ -42,6 +45,9 @@ export default function Other({ isEdit, currentUser }) {
       internationalCommission: currentUser?.internationalCommission || 0,
       withdrawal: currentUser?.withdrawal || 0,
       other: currentUser?.other || 0,
+      accessCode: currentUser?.accessCode || '',
+      merchantId: currentUser?.merchantId || '',
+      shaRequest: currentUser?.shaRequest || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -67,6 +73,9 @@ export default function Other({ isEdit, currentUser }) {
         internationalCommission: Number(values.internationalCommission),
         withdrawal: Number(values.withdrawal),
         other: Number(values.other),
+        accessCode: values.accessCode,
+        merchantId: values.merchantId,
+        shaRequest: values.shaRequest
       });
 
       if (response.data.id > 0) {
@@ -88,18 +97,31 @@ export default function Other({ isEdit, currentUser }) {
           <Grid item xs={12}>
             <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
-                <RHFTextField name="commission" label="Commission Percentage" type="number" disabled={isUser && true} />
+                <Box
+                  sx={{
+                    display: 'grid',
+                    rowGap: 3,
+                    columnGap: 2,
+                    gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                  }}
+                >
+                  <RHFTextField name="commission" label="Commission Percentage" type="number" disabled={isUser && true} />
 
-                <RHFTextField
-                  name="internationalCommission"
-                  label="International Commission Percentage"
-                  type="number"
-                  disabled={isUser && true}
-                />
+                  <RHFTextField
+                    name="internationalCommission"
+                    label="International Commission Percentage"
+                    type="number"
+                    disabled={isUser && true}
+                  />
 
-                <RHFTextField name="withdrawal" label="Withdrawal charge" type="number" disabled={isUser && true} />
+                  <RHFTextField name="withdrawal" label="Withdrawal charge" type="number" disabled={isUser && true} />
 
-                <RHFTextField name="other" label="Other Charges" type="number" disabled={isUser && true} />
+                  <RHFTextField name="other" label="Other Charges" type="number" disabled={isUser && true} />
+                </Box>
+
+                <RHFTextField name="accessCode" label="Access Code" type="text" disabled={isUser && true} />
+                <RHFTextField name="merchantId" label="Merchant Identifier" type="text" disabled={isUser && true} />
+                <RHFTextField name="shaRequest" label="SHA Request" type="text" disabled={isUser && true} />
               </Stack>
               {!isUser && (
                 <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>

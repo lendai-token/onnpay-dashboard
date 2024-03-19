@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
@@ -48,6 +48,8 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
 
   const { user } = useAuth();
 
+  const [mode, setMode] = useState(localStorage.getItem('mode'));
+
   const isDesktop = useResponsive('up', 'lg');
 
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
@@ -77,8 +79,9 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
           ...(isCollapse && { alignItems: 'center' }),
         }}
       >
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Stack direction="row" alignItems="center" justifyContent="flex-start" gap="10px">
           <Logo sx={{ width: 70, height: 40 }} />
+          <p style={{ position: "relative", top: "-7px", color: "#00ab55", fontSize: "16px", fontWeight: "bolder" }}>{mode === "sandbox" ? "SANDBOX" : ""}</p>
 
           {/* {isDesktop && !isCollapse && (
             <CollapseButton onToggleCollapse={onToggleCollapse} collapseClick={collapseClick} />

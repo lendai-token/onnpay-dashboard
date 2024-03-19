@@ -14,7 +14,8 @@ import useAuth from '../../../hooks/useAuth';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // components
 import Iconify from '../../../components/Iconify';
-import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
+import { FormProvider, RHFTextField, RHFCheckbox, RHFRadioGroup } from '../../../components/hook-form';
+import PaymentModeModal from '../../../components/ModeModal';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +25,8 @@ export default function LoginForm() {
   const isMountedRef = useIsMountedRef();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [mode, setMode] = useState(localStorage.getItem('mode') || 'sandbox');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
@@ -31,8 +34,8 @@ export default function LoginForm() {
   });
 
   const defaultValues = {
-    email: 'adam@onnpay.com',
-    password: 'adam!234',
+    email: 'admin@onnpay.com',
+    password: 'adam0408',
     remember: true,
   };
 
@@ -60,10 +63,28 @@ export default function LoginForm() {
     }
   };
 
+  const changeMode = (mode) => {
+    setMode(mode);
+    setIsModalOpen(true);
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  }
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
+
+        <RHFRadioGroup 
+          name="mode"
+          options={['sandbox', 'production']}
+          getOptionLabel={['Sandbox Mode', 'Production Mode']}
+          value={mode}
+          onChange={(e) => changeMode(e.target.value)}
+        />
+        <PaymentModeModal open={isModalOpen} onClose={handleCloseModal} mode={mode} />
 
         <RHFTextField name="email" label="Email address" />
 

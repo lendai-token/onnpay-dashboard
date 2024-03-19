@@ -110,11 +110,25 @@ export default function Paymentlist() {
           ? await axios.get('/payment')
           : await axios.get(`/payment/get_all_by_email?email=${user.email}`);
 
-      setPaymentList(response.data);
+      const updatePaymentList = response.data.map(payment => {
+        if (payment.status === 'Pending' && isExpired(payment.expiryDate)) {
+          return { ...payment, status: "Expired" };
+        } 
+          
+        return payment;
+      });
+
+      setPaymentList(updatePaymentList);
     };
 
     handleRequestGetAllPayments();
   }, [user]);
+
+  const isExpired = (expiryDate) => {
+    const now = new Date();
+    const expiryDateTime = new Date(expiryDate);
+    return expiryDateTime < now;
+  }
 
   return (
     <Page title="Payment: List">
@@ -177,7 +191,11 @@ export default function Paymentlist() {
                         <TableCell align="left">
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={(status === 'Pending' && 'warning') || 'success'}
+                            color={
+                              (status === 'Pending' && 'warning') ||
+                              (status === 'Expired' && 'error') ||
+                              'success'
+                            }
                           >
                             {sentenceCase(status)}
                           </Label>

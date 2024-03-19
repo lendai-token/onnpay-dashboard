@@ -71,7 +71,11 @@ export default function PaymentModal({ open, onClose, invoice }) {
             <Typography variant="body1">
               <Label
                 variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                color={(invoice?.status === 'Pending' && 'warning') || 'success'}
+                color={
+                  (invoice?.status === 'Pending' && 'warning') ||
+                  (invoice?.status === 'Expired' && 'error') ||
+                  'success'
+                }
               >
                 {invoice?.status}
               </Label>

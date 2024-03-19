@@ -96,12 +96,11 @@ export default function PaymentNewForm({ isEdit, currentPayment }) {
       values.serviceCommand = 'PAYMENT_LINK';
       values.linkCommand = 'PURCHASE';
       values.expiryDate = fDateTimeWithTimezone(values.expiryDate);
+      values.userid = user.id;
 
       const config = {
         headers: { 'x-api-key': user.apiKey !== null ? user.apiKey : process.env.REACT_APP_DEFAULT_API_KEY },
       };
-
-      console.log(config);
 
       const response = await axios.post('/payment/create_invoice', values, config);
 
